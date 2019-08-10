@@ -59,6 +59,7 @@ public class Search {
 		
 		Scanner scanner = new Scanner(System.in);
 		while(true) {
+		    System.out.println("ÇëÊäÈë²éÑ¯´Ê¡ı");
 			key_word = scanner.nextLine();
 			if(key_word.equals("quit"))
 				break;
