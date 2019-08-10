@@ -39,16 +39,17 @@ public class Search {
 	
 	public static void main(String[] args) throws IOException {
 		// 1. 建立索引
-		IndexManager index_manager = new IndexManager();
 		if(!IndexManager.checkExistIndex(IndexManager.index_name)) {
 			IndexManager.createIndex(IndexManager.index_name);
 		}
+		IndexManager.index_client.close();
 		
 		// 2.添加文档
 		ArrayList<Product> products = GetFiles.getFiles(GetFiles.start_dir);
 		for(Product cur_p : products) {
 			DocumentManager.addDocument(cur_p);       // 文档添加到es服务器索引中
 		}
+		DocumentManager.doc_client.close();
 		
 		// 3.查询
 		String key_word = null;
@@ -57,10 +58,11 @@ public class Search {
 		int num_item = 5;
 		
 		Scanner scanner = new Scanner(System.in);
-		while(scanner.hasNext()) {
+		while(true) {
 			key_word = scanner.nextLine();
 			if(key_word.equals("quit"))
 				break;
+			System.out.println("当前查询词: " + key_word);
 			SearchHits hits = search(key_word, start, count);
 	        SearchHit[] searchHits = hits.getHits();
 	        for (SearchHit hit : searchHits) {
@@ -68,6 +70,7 @@ public class Search {
 	        }
 	        System.out.println("输入 quit 结束查询");
 		}
+		System.out.println("查询结束");
 		scanner.close();
         search_client.close();
 	}

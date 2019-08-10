@@ -16,7 +16,7 @@ import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 
 public class DocumentManager {
-	private static RestHighLevelClient doc_client = new RestHighLevelClient(
+	public static RestHighLevelClient doc_client = new RestHighLevelClient(
             RestClient.builder(new HttpHost("localhost", 9200, "http")));
 	
 	public static String index_name = new IndexManager().index_name;
@@ -25,7 +25,7 @@ public class DocumentManager {
 		IndexRequest indexRequest = new IndexRequest(index_name, "file", String.valueOf(product.getId()))
 				.source("name", product.getName());
         doc_client.index(indexRequest);
-//        System.out.println("已经向ElasticSearch服务器增加文件："+ file_name);
+        System.out.println("已经向ElasticSearch服务器增加文件："+ product.getName());
 	}
 	
 	public static void delDocument(int id) throws IOException {

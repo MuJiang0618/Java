@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class GetFiles {
 	static ArrayList<Product> visited_files = new ArrayList<Product>();
 	public static int id_count = 1;
-	public static File start_dir = new File("D:\\study");   // 起始目录
+	public static File start_dir = new File("D:\\document");   // 起始目录
 	
 	public static void main(String[] args) {
 		ArrayList<Product> all_file_name = null;

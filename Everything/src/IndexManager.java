@@ -9,10 +9,10 @@ import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 
 public class IndexManager {
-	private static RestHighLevelClient index_client = new RestHighLevelClient(
-            RestClient.builder(new HttpHost("localhost", 9200, "http")));  // Óëes·þÎñÆ÷½¨Á¢Á¬½Ó
+	public static RestHighLevelClient index_client = new RestHighLevelClient(
+            RestClient.builder(new HttpHost("localhost", 9200, "http")));  // ï¿½ï¿½esï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	
-	public static String index_name = "FileSystem";
+	public static String index_name = "filesystem";
 	
 	public static void main(String[] args) throws IOException {
 	}
@@ -29,9 +29,9 @@ public class IndexManager {
             }
         }
         if(result)
-            System.out.println("Ë÷Òý:" +indexName + " ´æÔÚ");
+            System.out.println("ï¿½ï¿½ï¿½ï¿½:" +indexName + " ï¿½ï¿½ï¿½ï¿½");
         else
-            System.out.println("Ë÷Òý:" +indexName + " ²»´æÔÚ");
+            System.out.println("ï¿½ï¿½ï¿½ï¿½:" +indexName + " ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
          
         return result;
     }
