@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>幽灵阳光</title>
+</head>
+
+<script src="https://how2j.cn/study/jquery.min.js"></script>
+<link href="https://how2j.cn/study/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+<script src="https://how2j.cn/study/js/bootstrap/3.3.6/bootstrap.min.js"></script>
+
+<body>
+<div style="width: 45%; margin: 0 auto">
+    <br>
+    <br>
+    <input type="text" class="form-control" id="article_title" value="" placeholder="标题"
+           style="text-align: center; font-size: medium">
+    <br>
+    <br>
+    <textarea class="form-control" id="article_content" style="overflow-y: scroll; height: 60%;
+    font-size: medium" cols="100" rows="26">
+    </textarea>
+    <br>
+
+    <button onclick="submit_article()" style="float: right">提交</button>
+    <button onclick="save_sketch()" style="float: right">保存</button>
+</div>
+
+<script type="text/javascript">
+    function submit_article() {
+        var title = $("#article_title").val();
+        if (title.length == 0) {
+            alert("标题不能为空!");
+        } else {
+            var content = $("#article_content").val();
+
+            $.ajax({
+                type: 'POST',
+                url: 'submitBlog',
+                data: {
+                    'title': title,
+                    'content': content,
+                    'author_id': 1,
+                    'author_name': "lk",
+                    'create_time': new Date()
+                },
+                async: true,
+                // contentType: "application/json charset=utf-8",
+                success: function (data) {
+                    console.log(data)
+                }
+            });
+        }
+    }
+</script>
+
+</body>
+</html>

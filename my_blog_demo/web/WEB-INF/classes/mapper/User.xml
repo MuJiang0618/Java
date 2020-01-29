@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.UserMapper">
+    <insert id="register" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
+            insert into user (user_name, email_address, pwd) values (#{userName}, #{emailAddress}, #{pwd})
+    </insert>
+
+    <insert id="addNewUserData">
+            insert into user_data (user_id, photo_url, blog_category, checklist) values (#{userId}, "default.png", '', '')
+    </insert>
+
+    <delete id="del" parameterType="_int" >
+            delete from user where id= #{id}
+    </delete>
+
+    <select id="get" parameterType="_int" resultType="User">
+            select * from user where id= #{id}
+        </select>
+
+    <update id="update" parameterType="User" >
+            update user set name=#{name} where id=#{id}
+        </update>
+
+    <select id="list" resultType="User">
+        select * from   user
+        <if test="start!=null and count!=null">
+            limit #{start},#{count}
+        </if>
+    </select>
+
+    <select id="num_blog" resultType="_int">
+            select count(*) from user
+    </select>
+
+    <select id="getPwd" parameterType="String" resultType="String">
+        select pwd from user where email_address = #{emailAddress}
+    </select>
+
+    <select id="checkRegister" resultType="_int">
+        select count(*) from user where email_address = #{emailAddress}
+    </select>
+
+    <select id="getUserId" resultType="_int">
+        select id from user where email_address = #{emailAddress}
+    </select>
+
+    <select id="getUserData" resultMap="userData">
+        select * from user_data where user_id = #{userId}
+    </select>
+
+    <resultMap id="userData" type="UserDataForDAO">
+        <id column="user_id" property="userId"/>
+        <result column="photo_url" property="imgSrc"/>
+        <result column="blog_category" property="blogCategory"/>
+        <result column="checklist" property="checklist"/>
+    </resultMap>
+
+</mapper>

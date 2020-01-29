@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.BlogMapper">
+    <insert id="add" parameterType="Blog" useGeneratedKeys="true" keyProperty="blog_id">
+            insert into blog ( author_id, author_name, title, content, create_time)
+             values (#{author_id}, #{author_name}, #{title}, #{content}, #{create_time})
+    </insert>
+
+    <!--    通过博客ID删除博客-->
+    <delete id="del" parameterType="_int" >
+            delete from blog where id= #{id}
+        </delete>
+
+    <select id="get" parameterType="_int" resultType="Blog">
+            select * from blog where id= #{id}
+        </select>
+
+    <update id="update" parameterType="Blog" >
+            update blog set name=#{name} where id=#{id}
+        </update>
+
+    <select id="list" resultType="Blog">
+        select * from   blog
+        <if test="start!=null and count!=null">
+            limit #{start},#{count}
+        </if>
+    </select>
+
+    <select id="num_blog" resultType="_int">
+            select count(*) from   blog
+    </select>
+</mapper>
