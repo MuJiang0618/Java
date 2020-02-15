@@ -6,6 +6,7 @@ import pojo.UserDataForDAO;
 
 import java.util.Map;
 
+
 public interface UserMapper {
     void register(User user);
 
@@ -18,4 +19,8 @@ public interface UserMapper {
     int getUserId(String emailAddress);
 
     UserDataForDAO getUserData(int userId);
+
+    String getUserName(int userId);
+
+    User getUserByUserName(String userName);
 }

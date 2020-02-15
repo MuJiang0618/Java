@@ -1,6 +1,8 @@
 package service.impl;
 
 import mapper.UserMapper;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pojo.User;
@@ -8,22 +10,31 @@ import pojo.UserData;
 import pojo.UserDataForDAO;
 import service.UserService;
 
+import org.apache.shiro.crypto.hash.Md5Hash;
+
 import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    UserMapper userMapper;
+    @Autowired UserMapper userMapper;
 
     @Override
     public void doRegister(User user) {
+        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
+        int times = 2;   // 使用md5算法加密2次
+        String encodedPassword = new SimpleHash("md5", user.getPwd(), salt, times).toString();
+        user.setSalt(salt);
+        user.setPwd(encodedPassword);
         userMapper.register(user);
-        userMapper.addNewUserData(user.getUserId());
+        userMapper.addNewUserData(user.getUserId());   // 向表user_data插入新用户的初始信息
     }
 
     @Override
     public boolean checkLogin(String emailAddress, String pwd) {
         String correctPwd = userMapper.getPwd(emailAddress);
+        if(correctPwd == null)  // 账号不存在
+            return false;
+
         if(correctPwd.equals(pwd)) {
             return true;
         } else {
@@ -60,5 +71,15 @@ public class UserServiceImpl implements UserService {
         userData.setChecklist(checklist);
 
         return userData;
+    }
+
+    @Override
+    public String getUserName(int userId) {
+        return userMapper.getUserName(userId);
+    }
+
+    @Override
+    public User getUserByUserName(String userName) {
+        return userMapper.getUserByUserName(userName);
     }
 }

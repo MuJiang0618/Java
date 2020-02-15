@@ -5,20 +5,13 @@
 
 <mapper namespace="mapper.UserMapper">
     <insert id="register" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
-            insert into user (user_name, email_address, pwd) values (#{userName}, #{emailAddress}, #{pwd})
+            insert into user (user_name, email_address, pwd, salt) values (#{userName}, #{emailAddress}, #{pwd}, #{salt})
     </insert>
 
     <insert id="addNewUserData">
-            insert into user_data (user_id, photo_url, blog_category, checklist) values (#{userId}, "default.png", '', '')
+            insert into user_data (user_id, photo_url, blog_category, checklist)
+            values (#{userId}, "default.png", '', '')
     </insert>
-
-    <delete id="del" parameterType="_int" >
-            delete from user where id= #{id}
-    </delete>
-
-    <select id="get" parameterType="_int" resultType="User">
-            select * from user where id= #{id}
-        </select>
 
     <update id="update" parameterType="User" >
             update user set name=#{name} where id=#{id}
@@ -47,6 +40,10 @@
         select id from user where email_address = #{emailAddress}
     </select>
 
+    <select id="getUserName" resultType="String">
+        select user_name from user where id = #{userId}
+    </select>
+
     <select id="getUserData" resultMap="userData">
         select * from user_data where user_id = #{userId}
     </select>
@@ -57,5 +54,9 @@
         <result column="blog_category" property="blogCategory"/>
         <result column="checklist" property="checklist"/>
     </resultMap>
+
+    <select id="getUserByUserName" resultType="User">
+        select * from user where email_address = #{userName}
+    </select>
 
 </mapper>

@@ -2,6 +2,11 @@ package controller;
 
 import com.alibaba.druid.support.json.JSONUtils;
 import com.sun.org.apache.xml.internal.utils.UnImplNode;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
@@ -16,6 +21,7 @@ import pojo.UserData;
 import service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -23,66 +29,40 @@ import java.util.Map;
 import org.junit.Test;
 import service.UserService;
 
-
 @Controller
 @RequestMapping("")
 public class UserController {
-    @Autowired
-    UserService userService;
-
-    @Test
-    public void test() {
-        String s = "NLP|ML|机器学习";
-        String[] a = s.split("\\|");
-        for(String b : a)
-            System.out.println(b);
-    }
+    @Autowired UserService userService;
 
     @RequestMapping("succeedRegister")
-    public ModelAndView succeedRegister(User user) {
-        ModelAndView mav = new ModelAndView("home.jsp");
+    public ModelAndView succeedRegister(User user, HttpSession session) {
+        ModelAndView mav = new ModelAndView("redirect:enterHomePage");
 
         user.setUserName(user.getEmailAddress()+"_hello");  // 注册后给一个默认昵称
         userService.doRegister(user);
         System.out.println("一个新用户成功注册");  // 改成第xxx位用户成功注册
-        // 数据库中字段值为null, getUserData()会报空指针异常
-        UserData userData = userService.getUserData(user.getUserId());
-        mav.addObject("imgSrc", userData.getImgSrc());
+
+        session.setAttribute("userId", user.getUserId());
 
         return mav;
     }
 
-//    @RequestMapping("succeedLogin")
-//    public ModelAndView succeedLogin(User user) {
-//        ModelAndView mav = new ModelAndView("home.html");
-//
-//        user.setUserName(user.getEmailAddress()+"_hello");  // 注册后给一个默认昵称
-//        int userId = userService.getUserId(user.getEmailAddress());
-//        UserData userData = userService.getUserData(userId);
-//        mav.addObject("userData", userData);
-//        System.out.println("一位新用户成功登陆");
-//
-//        return mav;
-//    }
-
     @RequestMapping("checkLogin")
-    public ModelAndView checkLogin(String emailAddress, String pwd) {
-        ModelAndView mav = new ModelAndView();
-        boolean ifPwdCorrect = userService.checkLogin(emailAddress, pwd);
-        if (ifPwdCorrect) {
-            mav.setViewName("home.jsp");
+    public String checkLogin(String emailAddress, String pwd, Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(emailAddress, pwd);
+        try {
+            subject.login(token);
             int userId = userService.getUserId(emailAddress);
-            UserData userData = userService.getUserData(userId);
+            Session session = subject.getSession();
+            session.setAttribute("subject", subject);   // 用于在jsp通过 <c:if test="${empty subject.principal}">判断是否登录
+            session.setAttribute("userId", userId);
+            model.addAttribute("userData", userService.getUserData(userId));
 
-            mav.addObject("imgSrc", userData.getImgSrc());
-            mav.addObject("userData", userData);
-
-            System.out.println("一位用户成功登陆");
-
-            return mav;
-        } else {
-            mav.setViewName("login.html");
-            return mav;
+            return "redirect:enterHomePage";
+        } catch (AuthenticationException e) {
+            model.addAttribute("error", "验证失败");
+            return "redirect:enterDoLogin";
         }
     }
 
@@ -92,6 +72,16 @@ public class UserController {
         boolean emailAddressIfExist = userService.checkRegister(emailAddress);
 
         return emailAddressIfExist;
+    }
+
+    @RequestMapping("enterHomePage")
+    public ModelAndView enterHomePage(HttpSession session) {
+        int userId = (Integer) session.getAttribute("userId");
+        UserData userData = userService.getUserData(userId);
+        ModelAndView mav = new ModelAndView("home.jsp");
+
+        mav.addObject("userData", userData);
+        return mav;
     }
 
     @RequestMapping("enterDoLogin")

@@ -15,4 +15,8 @@ public interface UserService {
     int getUserId(String emailAddress);
 
     UserData getUserData(int userId);
+
+    String getUserName(int userId);
+
+    User getUserByUserName(String userName);
 }

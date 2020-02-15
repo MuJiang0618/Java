@@ -14,19 +14,23 @@
     <context:annotation-config/>
 
     <context:component-scan base-package="controller">
-        <context:include-filter type="annotation"
-                                expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
     <mvc:annotation-driven />
-
     <mvc:default-servlet-handler />
 
     <!-- 视图定位 -->
-    <bean
-            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
         <property name="prefix" value="/WEB-INF/page/" />
 <!--        <property name="suffix" value="" />-->
     </bean>
+
+<!--    实现文件上传功能-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 最大文件大小，单位字节 我取2M-->
+        <property name="maxUploadSize" value="2100000"/>
+    </bean>
+
 </beans>

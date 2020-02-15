@@ -14,6 +14,7 @@ public class UserData {
         return userId;
     }
 
+
     public void setBlogCategory(String[] blogCategory) {
         this.blogCategory = blogCategory;
     }

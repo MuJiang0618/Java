@@ -5,6 +5,7 @@ public class User {
     public String userName;
     public String emailAddress;
     public String pwd;
+    public String salt;
 
     public void setUserId(int userId) {
         this.userId = userId;
@@ -36,5 +37,13 @@ public class User {
 
     public String getPwd() {
         return pwd;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public String getSalt() {
+        return salt;
     }
 }

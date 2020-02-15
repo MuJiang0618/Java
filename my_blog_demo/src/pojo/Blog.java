@@ -1,19 +1,20 @@
 package pojo;
 
 import org.apache.ibatis.jdbc.Null;
+import org.apache.solr.client.solrj.beans.Field;
 
 import java.time.DateTimeException;
 import java.util.Date;
 
 public class Blog {
 
-    public int blog_id;
+    @Field("blog_id") public int blog_id;
     public int author_id;
     public String author_name;
-    public String title;
-    public String content;
+    @Field("title") public String title;
+    @Field("content") public String content;
     public Date create_time;
-    public int like;
+    @Field("like") public int like;
 
     public int getBlog_id() {
         return blog_id;
