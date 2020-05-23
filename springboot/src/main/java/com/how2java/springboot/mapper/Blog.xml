@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.how2java.springboot.mapper.BlogMapper">
+
+    <insert id="submitBlog" parameterType="Blog" useGeneratedKeys="true" keyProperty="blogId">
+            insert into blog (author_id, author_name, title, content, create_time, likes) values (#{authorId}, #{authorName}, #{title}, #{content}, #{createTime}, #{likes})
+    </insert>
+
+    <delete id="delBlog" parameterType="_int" >
+        delete from blog where blog_id = #{blogId}
+    </delete>
+
+    <select id="getBlog" parameterType="_int" resultType="Blog">
+        select * from blog where blog_id = #{blogId}
+    </select>
+
+    <select id="listBlogs" parameterType="_int" resultType="Blog">
+        select * from blog where author_id = #{userId}
+    </select>
+
+</mapper>

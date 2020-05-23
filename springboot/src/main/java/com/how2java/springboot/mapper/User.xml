@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.how2java.springboot.mapper.UserMapper">
+
+    <insert id="register" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
+            insert into user (user_name, pwd, salt, nick_name) values (#{userName}, #{pwd}, #{salt}, #{nickName})
+    </insert>
+
+    <select id="listAllUser" resultType="User">
+        select user_id as userId, user_name as userName, pwd, salt, nick_name as nickName from user
+    </select>
+
+    <select id="getUserName" resultType="String">
+        select user_name from user where user_id = #{userId}
+    </select>
+
+    <select id="getUserByUserName" resultType="User">
+        select user_id as userId, user_name as userName, pwd, salt, nick_name as nickName from user where user_name = #{userName}
+    </select>
+
+    <select id="getNicknameById" resultType="String">
+        select nick_name from user where user_id = #{userId}
+    </select>
+
+</mapper>

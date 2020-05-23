@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>幽灵阳光</title>
+</head>
+
+<script src="https://how2j.cn/study/jquery.min.js"></script>
+<link href="https://how2j.cn/study/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+<script src="https://how2j.cn/study/js/bootstrap/3.3.6/bootstrap.min.js"></script>
+
+<body>
+<div style="width: 45%; margin: 0 auto">
+    <a href="/user/logout">注销</a>
+    <br>
+    <br>
+    <input type="text" class="form-control" id="blog_title" value="" placeholder="标题"
+           style="text-align: center; font-size: medium">
+    <br>
+    <br>
+    <textarea class="form-control" id="blog_content" style="overflow-y: scroll; height: 60%;
+    font-size: medium" cols="100" rows="23">
+    </textarea>
+    <br>
+
+    <button onclick="submitBlog()" style="float: right">提交</button>
+    <button onclick="saveSketch()" style="float: right">保存</button>
+</div>
+
+<script type="text/javascript">
+    function submitBlog() {
+        var title = $("#blog_title").val();
+        var content = $("#blog_content").val();
+        if (title.length === 0) {
+            alert("标题不能为空!");
+            return;
+        }
+
+        if($("#blog_content").val().length === 0) {
+            alert("内容不能为空!");
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: 'submitBlog',
+            data: {
+                'title': title,
+                'content': content,
+                'createTime': new Date()
+            },
+            // contentType: "application/json charset=utf-8",
+            success: function () {
+                window.location.href = "redirect:/blog/browseMyBlogs";
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

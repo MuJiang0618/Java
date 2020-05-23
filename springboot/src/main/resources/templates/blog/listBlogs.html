@@ -1,0 +1,109 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>幽灵阳光</title>
+
+    <script src="https://how2j.cn/study/jquery.min.js"></script>
+    <link href="https://how2j.cn/study/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+    <script src="https://how2j.cn/study/js/bootstrap/3.3.6/bootstrap.min.js"></script>
+</head>
+<body>
+
+<style>
+    #导航栏{
+        position: absolute;
+        left:400px;
+        top: 100px;
+    }
+
+    #分类栏{
+        position: absolute;
+        left:100px;
+        top: 300px;
+    }
+
+    #头像{
+        position: absolute;
+        left: 150px;
+        top: 100px;
+        width: 120px;
+        height: 120px;
+    }
+
+
+</style>
+
+<div style="position: absolute; width: 25%">
+    <a href="/user/logout">注销</a>
+    <img src="/img/profile_img/${userData.imgSrc}" width="100px" height="100px" class="img-circle" style="position: absolute; left: 140px; top: 120px">
+    <a href="enterUploadProfileImg" style="position: absolute; left: 155px; top: 230px">上传头像</a>
+    <br>
+    <br>
+
+    <dl id="分类栏" class="nav nav-pills nav-stacked" style="width:180px; left: 140px">
+        <dt><button>Add</button></dt>
+        <c:forEach items="${userData.blogCategory}" var="category" varStatus="st">
+            <li role="presentation"><a href="#">${category}</a></li>
+        </c:forEach>
+    </dl>
+</div>
+
+<ul id="导航栏" class="nav nav-pills">
+    <li role="presentation"><a href="#">Home</a></li>
+    <li role="presentation"><a href="/blog/browseMyBlogs">我的博客</a></li>
+    <li role="presentation"><a href="#">私信</a></li>
+    <li role="presentation"><a href="#">广场</a></li>
+    <li role="presentation"><a>    </a></li>
+    <li role="presentation"><a>    </a></li>
+    <li role="presentation"><a role="button" href="/blog/addBlog">写博客</a></li>
+
+    <input type="text" id="addToDo" class="form-control"
+           value="" placeholder="今天想要做点儿什么呢?~" style="position: absolute;
+           top: 40px; left: 10px; width: 500px; border-color: green">
+
+    <button type="button" onclick="addToDo()" style="position: absolute; top: 40px; left: 530px">添加</button>
+
+    <ul style="position: absolute; top: 90px;">
+        <c:forEach items="${userData.checklist}" var="thing" varStatus="st">
+            <li role="listitem"><input type="text" class="list-group-item list-group-item-success" value= ${thing}></li>
+            <br>
+        </c:forEach>
+    </ul>
+</ul>
+
+<div style="width:500px;margin:20px auto;text-align: center">
+    <table align='center' border='1' cellspacing='0'>
+
+        <tr th:each="blog:${page.list}">
+            <td th:href= "@{/blog/blogDetail(blogId=${blog.blogId})}">${blog.title}</td>
+            <td th:text="${blog.authorName}">作者</td>
+            <td th:text="${blog.getCreateTime()}">发布时间</td>
+
+            <td><a th:href="@{/editCategory(id=${blog.blogId})}">编辑</a></td>
+            <td><a th:href="@{/delBlog(blogId=${blog.blogId})}">删除</a></td>
+        </tr>
+    </table>
+    <br/>
+    <div>
+        <a th:href="@{/listMyBlogs(start=0)}">[首  页]</a>
+        <a th:href="@{/listMyBlogs(start=${page.pageNum-1})}">[上一页]</a>
+        <a th:href="@{/listMyBlogs(start=${page.pageNum+1})}">[下一页]</a>
+        <a th:href="@{/listMyBlogs(start=${page.pages})}">[末  页]</a>
+    </div>
+    <br/>
+</div>
+
+<div style="position: absolute; width: 350px; left: 1100px; top: 100px">
+    <form action="search" method="post">
+        <input type="text" placeholder="想寻找什么?" class="list-group-item list-group-item-success" id="search" name="query">
+        <button type="submit" class="btn btn-primary" >搜索</button>
+    </form>
+</div>
+
+</body>
+
+<script>
+
+</script>
+
+</html>
