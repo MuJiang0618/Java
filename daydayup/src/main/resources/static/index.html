@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>daydayup</title>
+</head>
+<body>
+<!--直接一个搜索框-->
+
+<div class="search-input-wrap clearfix">
+    <div class="form-input-wrap f-l">
+        <form action="/search" class="input-kw-form">
+            <input type="search" autocomplete="off" name="topic" placeholder="想了解什么?" class="input-kw">
+        </form>
+        <i class="iconfont if-message"></i>
+        <i class="iconfont if-close"></i>
+    </div>
+    <i class="search-cancel f-l">取消</i>
+</div>
+
+<!--添加topic-->
+<li role="presentation"><a role="button" href="/topic/add_topic">添加topic</a></li>
+
+</body>
+</html>
