@@ -5,15 +5,15 @@
 
 <mapper namespace="org.lk.daydayup.mapper.TopicMapper">
 <!--    用于搜索topic-->
-    <select id="getTopicsByIds" resultType="Topic">
-        select * from topic where id in
-        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-            #{item}
+    <select id="getTopicsByIds" parameterType="java.util.List" resultType="Topic">
+        select * from topic where topic_id in
+        <foreach collection="list" index="index" item="topicId" open="(" separator="," close=")">
+            #{topicId}
         </foreach>
     </select>
 
     <select id="getTopicById" resultType="Topic">
-        select * from topic where id = #{topicId}
+        select * from topic where topic_id = #{topicId}
     </select>
 
     <select id="getItemsByTopicId" resultType="Item">
@@ -21,8 +21,8 @@
     </select>
 
     <insert id="addTopic" parameterType="Topic" useGeneratedKeys="true" keyProperty="topicId">
-        insert into topic (topic_name, like, dislike, hot)
-            values (#{topicName}, ${0}, ${0}, ${0})
+        insert into topic (name, likes, dislikes, hot)
+            values (#{name}, ${0}, ${0}, ${0})
     </insert>
 
 </mapper>

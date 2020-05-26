@@ -8,9 +8,9 @@ import java.util.List;
 public class Topic {
     @Field("topic_id") int topicId;
     @Field("topic_name") String name;
-    int like = 0;
-    int dislike = 0;
-    int hot = 0;  // 话题的热门程度, 用于在搜索结果中排序
+    @Field("likes") int likes = 0;
+    @Field("dislikes") int dislikes = 0;
+    @Field("hot") int hot = 0;  // 话题的热门程度, 用于在搜索结果中排序
 //    List<Integer> itemIds;
 
     // 标签
@@ -24,20 +24,20 @@ public class Topic {
         return name;
     }
 
-    public void setLike(int like) {
-        this.like = like;
+    public void setLikes(int like) {
+        this.likes = like;
     }
 
-    public int getLike() {
-        return like;
+    public int getLikes() {
+        return likes;
     }
 
-    public void setDislike(int dislike) {
-        this.dislike = dislike;
+    public void setDislikes(int dislike) {
+        this.dislikes = dislike;
     }
 
-    public int getDislike() {
-        return dislike;
+    public int getDislikes() {
+        return dislikes;
     }
 
     public void setHot(int hot) {

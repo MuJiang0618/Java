@@ -6,14 +6,18 @@ import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.lk.daydayup.mapper.TopicMapper;
+import org.lk.daydayup.pojo.Item;
 import org.lk.daydayup.pojo.Topic;
 import org.lk.daydayup.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /*
 如何对搜索结果排序?
@@ -21,57 +25,48 @@ import java.io.IOException;
  */
 
 @RestController
-@RequestMapping("/topic")
+@RequestMapping("/topics")
 public class TopicController {
 
     public static SolrClient client;
     private static String url;
     static {
-        url = "http://localhost:8983/solr/my_blog";
+        url = "http://localhost:8983/solr/daydayup";
         client = new HttpSolrClient.Builder(url).build();
     }
 
     @Autowired TopicService topicService;
 
 //    @GetMapping("")
-//    @ResponseBody
-//    public String test0() {
-//        System.out.println("shide");
-//        return "asd";
-//    }
-//
-//    @GetMapping("{id}")
-//    @ResponseBody
-//    public String test(@PathVariable("id") String id) {
-//        System.out.println(id);
-//        return "asd";
+//    public ModelAndView searchTopic(String query, ModelAndView mav) throws IOException, SolrServerException {
+//        // 查询Solr
+//        List<Topic> topics = topicService.search(query);
+//        mav.setViewName("search_result");
+//        mav.addObject("topics", topics);   // 用于在搜索页面列出相关topic的信息
+//        return mav;
 //    }
 
     // 返回1个topic的详情页
-    // /topic/12345
     @GetMapping("{topicId}")
-    public String topicDetail(@PathVariable("topicId") int topicId, Model model) {
-        model.addAttribute("items", topicService.getItemsById(topicId));
-        model.addAttribute("topic", topicService.getTopicById(topicId));
+    public ModelAndView topicDetail(@PathVariable("topicId") int topicId, ModelAndView mav) {
+        mav.setViewName("topic_detail");
+        Item[] items = topicService.getItemsById(topicId);
+        if(items != null)
+            mav.addObject("items", items);
+        mav.addObject("topic", topicService.getTopicById(topicId));
 
-        return "topic_detail";
+        return mav;
     }
 
     // 表单中向topic注入name
     @PostMapping("")
-    public String SubmitAddTopic(@RequestBody Topic topic) throws IOException, SolrServerException {
+    public void SubmitAddTopic(Topic topic, HttpServletResponse response) throws IOException, SolrServerException {
         // 数据库
         topicService.addTopic(topic);
-
-        // 添加索引到Solr
-        DocumentObjectBinder binder = new DocumentObjectBinder();
-        SolrInputDocument doc = binder.toSolrInputDocument(topic);
-        client.add(doc);
-        client.commit();
-
+        topicService.addTopicForIndex(topic);   //  添加索引到Solr
 
         // 重定向到该新建的topic详情页
-        return "redirect:/topic/" + String.valueOf(topic.getTopicId());
+        response.sendRedirect("/topics/" + topic.getTopicId());
     }
 
     public void delTopic() {

@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -19,15 +18,19 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:class="${status.even}?'even':'odd'" th:each="topic, status: ${topics}">
-            <td  th:text="${status.index}"></td>
-<!--            <td th:text="${topics.name}"></td>-->
-            <td th:href="/topic_detail?topic_id=${topic.topicId}" th:text="${topics.name}">topic name</td>-->
-            <td th:text="${topic.like}">like</td>
-            <td th:text="${topic.dislike}">dislike</td>
-<!--            <td th:text="${topic.hot}">hot</td>-->
+
+        <tbody>
+        <tr th:each="topic: ${topics}">
+            <td><a th:href="@{'/topics/' + ${topic.topicId}}" th:text="${topic.name}">topic name</a></td>
+            <td th:text="${topic.likes}">likes</td>
+            <td th:text="${topic.dislikes}">dislikes</td>
+            <td th:text="${topic.hot}">hot</td>
+
+            <br>
+            <br>
         </tr>
         </tbody>
+
     </table>
 </div>
 

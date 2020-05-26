@@ -5,13 +5,15 @@ import org.lk.daydayup.pojo.Item;
 import org.lk.daydayup.pojo.Topic;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface TopicService {
-    Topic[] search(String topic) throws IOException, SolrServerException;
+    List<Topic> search(String topic) throws IOException, SolrServerException;
 
     Item[] getItemsById(int topicId);
 
     Topic getTopicById(int topicId);
 
     void addTopic(Topic topic);
+    void addTopicForIndex(Topic topic) throws IOException, SolrServerException;
 }

@@ -3,10 +3,12 @@ package org.lk.daydayup.service;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.beans.DocumentObjectBinder;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
 import org.lk.daydayup.mapper.TopicMapper;
 import org.lk.daydayup.pojo.Item;
 import org.lk.daydayup.pojo.Topic;
@@ -25,27 +27,25 @@ public class TopicServiceImpl implements TopicService {
     private static String url;
 
     static {
-        url = "http://localhost:8983/solr/my_blog";   // sorl服务器地址
+        http://127.0.0.1:8983/solr/#/
+        url = "http://localhost:8983/solr/daydayup";   // sorl服务器地址
         client = new HttpSolrClient.Builder(url).build();
     }
 
     @Autowired TopicMapper topicMapper;
 
     @Override
-    public Topic[] search(String topic) throws IOException, SolrServerException {
+    public List<Topic> search(String topic) throws IOException, SolrServerException {
         SolrQuery query = new SolrQuery();
         query.setStart(START);  // 查询结果分页时要更新start
         query.setRows(NUM_PER_PAGE);  // 每页的条目数
 //        query.setParam("sort", "like", "desc")    // 根据点赞数排序结果
-        query.setQuery(topic);
-        QueryResponse rsp = client.query(query);
-        SolrDocumentList documents= rsp.getResults();   // 查询的结果列表
-        List<Integer> topicIds = new ArrayList<>();
-        for(SolrDocument doc : documents)
-            topicIds.add((Integer) doc.getFieldValue("id"));  // topic的id
+        query.setQuery("topic_name:" + topic);
+//        solrQuery.setSort("onlineTime", ORDER.desc);
+        QueryResponse resp = client.query(query);
+        List<Topic> topics = resp.getBeans(Topic.class);
 
-        Topic[] resultSet = topicMapper.getTopicsByIds(topicIds);
-        return resultSet;
+        return topics;
     }
 
     @Override
@@ -61,5 +61,14 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public void addTopic(Topic topic) {
         topicMapper.addTopic(topic);
+    }
+
+    @Override
+    public void addTopicForIndex(Topic topic) throws IOException, SolrServerException {
+        // 添加索引到Solr
+        DocumentObjectBinder binder = new DocumentObjectBinder();
+        SolrInputDocument doc = binder.toSolrInputDocument(topic);
+        client.add(doc);
+        client.commit();
     }
 }

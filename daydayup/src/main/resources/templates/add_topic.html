@@ -1,6 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:content-Type="http://www.w3.org/1999/xhtml">
 <html xmlns:th="http://www.thymeleaf.org">
+
+<script src="https://how2j.cn/study/jquery.min.js"></script>
+<link href="https://how2j.cn/study/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+<script src="https://how2j.cn/study/js/bootstrap/3.3.6/bootstrap.min.js"></script>
+
 
 <head>
     <meta charset="UTF-8">
@@ -8,9 +13,8 @@
 </head>
 <body>
 
-<form action="/topic" method="post">
-    topic name: <input type="text" class="form-control" name="name"> <br>
-    <br>
+<form action="/topics" method="post">
+    topic name: <input type="text" class="form-control" name="name" > <br>
     <button type="submit" style="float: right">submit</button>
 </form>
 
