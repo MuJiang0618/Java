@@ -15,7 +15,6 @@ public class Topic {
 
     // 标签
 
-
     public void setName(String name) {
         this.name = name;
     }

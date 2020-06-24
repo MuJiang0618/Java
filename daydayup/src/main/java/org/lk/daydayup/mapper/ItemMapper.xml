@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.lk.daydayup.mapper.ItemMapper">
+
+<!--    添加item-->
+    <insert id="addItem" parameterType="Item" useGeneratedKeys="true" keyProperty="id">
+        insert into item (topic_id, url, intro, likes, dislikes, title)
+            values (#{topicId}, #{url}, #{intro}, ${0}, ${0}, #{title})
+    </insert>
+
+    <update id="giveLike" parameterType="_int">
+        update item set likes= likes+1 where id = #{itemId}
+    </update>
+
+</mapper>

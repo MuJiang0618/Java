@@ -54,6 +54,7 @@ public class TopicController {
         if(items != null)
             mav.addObject("items", items);
         mav.addObject("topic", topicService.getTopicById(topicId));
+//        mav.addObject("topicId", topicId);
 
         return mav;
     }

@@ -6,18 +6,18 @@
 <mapper namespace="org.lk.daydayup.mapper.TopicMapper">
 <!--    用于搜索topic-->
     <select id="getTopicsByIds" parameterType="java.util.List" resultType="Topic">
-        select * from topic where topic_id in
+        select topic_id as topicId, name, likes, dislikes, hot from topic where topic_id in
         <foreach collection="list" index="index" item="topicId" open="(" separator="," close=")">
             #{topicId}
         </foreach>
     </select>
 
-    <select id="getTopicById" resultType="Topic">
-        select * from topic where topic_id = #{topicId}
+    <select id="getTopicById" parameterType="_int" resultType="Topic">
+        select topic_id as topicId, name, likes, dislikes, hot from topic where topic_id = #{topicId}
     </select>
 
     <select id="getItemsByTopicId" resultType="Item">
-        select * from item where topic_id = #{topicId}
+        select id, topic_id as topicId, intro, url, likes, dislikes, title from item where topic_id = #{topicId}
     </select>
 
     <insert id="addTopic" parameterType="Topic" useGeneratedKeys="true" keyProperty="topicId">

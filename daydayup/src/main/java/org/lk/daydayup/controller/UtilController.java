@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-public class MainController {
+public class UtilController {
     @Autowired TopicService topicService;
 
     @RequestMapping("/search")

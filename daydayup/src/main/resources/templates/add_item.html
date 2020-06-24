@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:content-Type="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<script src="https://how2j.cn/study/jquery.min.js"></script>
+<link href="https://how2j.cn/study/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+<script src="https://how2j.cn/study/js/bootstrap/3.3.6/bootstrap.min.js"></script>
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>daydayup</title>
+</head>
+<body>
+
+<!--<form action="/items/add_item" method="post">-->
+<!--    item url: <input type="text" class="form-control" name="url" > <br>-->
+<!--&lt;!&ndash;    item title: <input type="text" class="form-control" name="title" > <br>&ndash;&gt;-->
+<!--    intro: <input type="text" class="form-control" name="intro" > <br>-->
+
+<!--    <p3 th:text="${topicId}"></p3>-->
+<!--    <button type="submit" style="float: right">submit</button>-->
+<!--</form>-->
+
+<form  th:action="@{'/items/add_item/' + ${topicId}}" method="post">
+    url: <input type="text" class="form-control" name="url" > <br>
+    title: <input type="text" class="form-control" name="title" > <br>
+    intro: <input type="text" class="form-control" name="intro" > <br>
+
+    <!--    <p3 th:text="${topicId}"></p3>-->
+    <button type="submit" style="float: right">submit</button>
+</form>
+
+</body>
+</html>
